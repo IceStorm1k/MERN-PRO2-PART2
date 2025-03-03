@@ -70,4 +70,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 
-### To run this code successfully, you need to start first part [First part](https://github.com/IceStorm1k/MERN-PRO2).
+### To run this code successfully, you need to start [First part](https://github.com/IceStorm1k/MERN-PRO2).
