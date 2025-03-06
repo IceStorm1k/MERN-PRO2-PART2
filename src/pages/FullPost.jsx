@@ -1,34 +1,44 @@
 import React from "react";
-
+import { useParams } from "react-router-dom";
 import { Post } from "../components/Post";
 import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock";
+import axios from "../axios";
 
 export const FullPost = () => {
+  const [data , setData] = React.useState();
+  const [isLoading , setLoading] = React.useState(true);
+  const { id } = useParams();
+
+  React.useEffect(() => {
+    axios.get(`/posts/${id}`).then((res) => {
+        setData(res.data);
+        setLoading(false);
+    }).catch(err => {
+        console.warn(err);
+        setLoading(false);
+        alert('An error occurred while receiving post');
+    });
+}, []);
+
+
+if (isLoading) {
+  return <Post isLoading={isLoading} isFullPost />
+}
+
   return (
     <>
       <Post
-        id={1}
-        title="Roast the code #1 | Rock Paper Scissors"
-        imageUrl="https://www.economist.com/cdn-cgi/image/width=1424,quality=80,format=auto/sites/default/files/images/2015/09/blogs/economist-explains/code2.png"
-        user={{
-          avatarUrl:
-            "https://www.economist.com/cdn-cgi/image/width=1424,quality=80,format=auto/sites/default/files/images/2015/09/blogs/economist-explains/code2.png",
-          fullName: "Keff",
-        }}
-        createdAt={"12 июня 2022 г."}
-        viewsCount={150}
-        commentsCount={3}
-        tags={["react", "fun", "typescript"]}
-        isFullPost
-      >
-        <p>
-          Hey there! 👋 I'm starting a new series called "Roast the Code", where
-          I will share some code, and let YOU roast and improve it. There's not
-          much more to it, just be polite and constructive, this is an exercise
-          so we can all learn together. Now then, head over to the repo and
-          roast as hard as you can!!
-        </p>
+              id={data._id}
+              title={data.title}
+              imageUrl={data.imageUrl}
+              user={data.user}
+              createdAt={data.createdAt}
+              viewsCount={data.viewsCount}
+              commentsCount={3}
+              tags={data.tags}
+              isFullPost >
+        <p>{data.text}</p>
       </Post>
       <CommentsBlock
         items={[
