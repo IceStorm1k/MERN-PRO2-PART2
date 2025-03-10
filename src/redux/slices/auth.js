@@ -6,6 +6,11 @@ export const fetchAuth = createAsyncThunk("auth/fetchAuth", async (params) => {
   return data;
 });
 
+export const fetchAuthMe = createAsyncThunk("auth/fetchAuthMe", async () => {
+  const { data } = await axios.get("/me");
+  return data;
+});
+
 const initialState = {
   data: null,
   status: "loading",
@@ -14,22 +19,41 @@ const initialState = {
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchAuth.pending, (state) => {
-        state.status = "loading";
-        state.data = null;
-      })
-      .addCase(fetchAuth.fulfilled, (state, action) => {
-        state.status = "loaded";
-        state.data = action.payload;
-      })
-      .addCase(fetchAuth.rejected, (state) => {
-        state.status = "error";
-        state.data = null;
-      });
+  reducers: {
+    logout: (state) => {
+      state.data = null;
+    }
+  },
+  extraReducers: {
+    [fetchAuth.pending]: (state) => {
+      state.status = "loading";
+      state.data = null;
+    },
+    [fetchAuth.fulfilled]: (state, action) => {
+      state.data = action.payload;
+      state.status = "loaded";
+    },
+    [fetchAuth.rejected]: (state) => {
+      state.status = "error";
+      state.data = null;
+    },
+    [fetchAuthMe.pending]: (state) => {
+      state.status = "loading";
+      state.data = null;
+    },
+    [fetchAuthMe.fulfilled]: (state, action) => {
+      state.data = action.payload;
+      state.status = "loaded";
+    },
+    [fetchAuthMe.rejected]: (state) => {
+      state.status = "error";
+      state.data = null;
+    },
   },
 });
 
+export const selectIsAuth = (state) => Boolean(state.auth.data);
+
 export const authReducer = authSlice.reducer;
+
+export const { logout } = authSlice.actions;
